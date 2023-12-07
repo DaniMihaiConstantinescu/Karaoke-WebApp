@@ -1,0 +1,49 @@
+.mainContainer{
+    padding: 1% 2%;
+}
+
+.playlistHeader{
+    margin-top: 1%;    
+    display: flex;
+    align-items: center;
+    gap: 2%;
+}
+
+.coverImage{
+    height: 8rem;
+    border-radius: 5px;
+}
+
+.songGrid{
+    margin-top: 2%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1%;
+}
+
+.songPreview{
+    display: flex;
+    height: fit-content;
+    gap: 5%;
+    align-items: center;
+    padding: 5%;
+    border-radius: 7px;
+    background-color: #464646;
+    color: white;
+}
+
+.songPreview:hover{
+    background-color: #595959;
+}
+
+.songCover{
+    height: 5rem;
+    border-radius: 10%;
+}
+
+@media (max-width: 40em){
+    .songGrid{
+        grid-template-columns: 1fr;
+        gap: 0.1%;
+    }
+  }
