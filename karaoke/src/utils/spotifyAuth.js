@@ -10,6 +10,8 @@ const requestAccessToken = async () => {
     const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
     const clientSecret = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET;
 
+    // console.log(clientSecret);
+
     const response = await axios.post(
       'https://accounts.spotify.com/api/token',
       querystring.stringify(data),

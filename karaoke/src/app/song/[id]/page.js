@@ -5,8 +5,11 @@ import SongHeader from "@/components/song/SongHeader";
 import fetchGeniusLyrics from "@/utils/getLyrics";
 import getLyrics from "@/utils/getLyrics";
 
+
 import getTrackDetails from '@/utils/getTrackDetails';
 import requestAccessToken from '@/utils/spotifyAuth';
+import axios from "axios";
+import jsonp from "jsonp";
 import React, { useEffect, useState } from 'react'
 
 export default function page({params}) {
@@ -39,40 +42,62 @@ export default function page({params}) {
           setTrackDetails(details);
         };
 
+        // const fetchLyrics = async () => {
+
+        //   if(trackDetails != null){
+          
+        //     const apiUrl = 'http://localhost:3005/song/byName'; // Replace with your actual API endpoint
+
+        //     const postData = {
+        //       artists: trackDetails.artists,
+        //       song: trackDetails.name,
+        //     };
+
+        //     axios
+        //       .post(apiUrl, postData)
+        //       .then((response) => {
+        //         console.log("Response:", response);
+        //         setLyrics(response.data)
+        //       })
+        //       .catch((error) => {
+        //         console.error(
+        //           "Error:",
+        //           error.response ? error.response.data : error.message
+        //         );
+        //         // Handle the error
+        //       });
+        //   }
+        // };
+
+
+
         const fetchLyrics = async () => {
-          // try {
-          //   const accessToken = process.env.NEXT_PUBLIC_GENIUS_ACCESS_TOKEN;
-          //   const artist = trackDetails.artists;
-          //   const title = trackDetails.name;
+          if (trackDetails !== null) {
 
-          //   const data = await fetchGeniusLyrics(accessToken, artist, title);
-          //   console.log('Lyrics Data:', data);
+            const apiUrl = 'http://localhost:3005/song/byName'; 
+            const proxyUrl = `${apiUrl}/song/byName`;
 
-          //   const auxLyrics = data.response;
-          //   setLyrics(auxLyrics)
-          // } catch (error) {
-          //   // Handle error if needed
-          // }
-
-
-          try {
-            const response = await fetch(`http://localhost:3001/get-genius-lyrics?artist=${artist}&title=${title}&accessToken=${accessToken}`);
-            
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-    
-            const data = await response.json();
-            setLyrics(data.lyrics);
-          } catch (error) {
-            console.error('Error fetching lyrics:', error);
-            setLyrics('Error fetching lyrics');
+            const postData = {
+              artists: trackDetails.artists,
+              song: trackDetails.name,
+            };
+        
+            // Using JSONP to make the cross-origin request through the proxy server
+            jsonp(proxyUrl, { param: 'callback', data: postData }, (err, data) => {
+              if (err) {
+                console.error('Error:', err.message);
+                // Handle the error
+              } else {
+                console.log('Response:', data);
+                setLyrics(data.lyrics);
+              }
+            });
           }
-
         };
 
         fetchTrackDetails();
         fetchLyrics();
+        
 
       }, [trackId, accessToken]);
 
